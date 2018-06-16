@@ -21,12 +21,16 @@ Adafruit_BMP085::Adafruit_BMP085() {
 }
 
 
-boolean Adafruit_BMP085::begin(uint8_t mode) {
+boolean Adafruit_BMP085::begin(int SDA, int SCL, uint8_t mode) {
   if (mode > BMP085_ULTRAHIGHRES) 
     mode = BMP085_ULTRAHIGHRES;
   oversampling = mode;
 
-  Wire.begin();
+  if (SDA == -1 && SCL == -1) {
+    Wire.begin();
+  } else {
+    Wire.begin(SDA, SCL);
+  }
 
   if (read8(0xD0) != 0x55) return false;
 
